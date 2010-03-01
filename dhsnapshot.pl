@@ -1,19 +1,16 @@
 #!/usr/bin/perl -w
 use strict;
+require File::Spec;
 
-my $basedir = '/opt/dhsnapshot';
-my $emptydir = "$basedir/__emptydir/";
-my $private_key = "$basedir/id_rsa";
+our %conf;
+$conf{'basedir'} = get_basedir();
+$conf{'emptydir'} = "$conf{'basedir'}/__emptydir/";
+$conf{'private_key'} = "$conf{'basedir'}/id_rsa";
 
-my $backup_source = "/home/user/myfiles/";
-my $backup_dest = 'b00000@hanjin.dreamhost.com:backup';
+require 'dhsnapshot.conf';
 
-my $rsync_path = '/usr/bin/rsync';
-my $sftp_path = '/usr/bin/sftp';
 my $lowest_interval = 'daily';
-
 my %rotation;
-
 $rotation{'daily'} = "
 -rmdir daily.6
 -rename daily.5 daily.6
@@ -68,12 +65,12 @@ if ($action eq "daily") {
 sub sync {
   my $interval = $lowest_interval;
   system(
-    $rsync_path,
-    '-e', "ssh -oIdentityFile=$private_key",
+    $conf{'rsync_path'},
+    '-e', "ssh -oIdentityFile=$conf{'private_key'}",
     '-az', '--delete',
     "--link-dest='../${interval}.1'",
-    $backup_source,
-    "$backup_dest/${interval}.0/"
+    $conf{'backup_source'},
+    "$conf{'backup_dest'}/${interval}.0/"
   );
 }
 
@@ -98,15 +95,15 @@ sub sync_to_empty {
   my $interval = shift;
   my $oldest_copy = shift;
 
-  mkdir $emptydir;
+  mkdir $conf{'emptydir'};
   system(
-    $rsync_path,
-    '-e', "ssh -oIdentityFile=$private_key",
+    $conf{'rsync_path'},
+    '-e', "ssh -oIdentityFile=$conf{'private_key'}",
     '-az', '--delete',
-    $emptydir,
-    "$backup_dest/${interval}.${oldest_copy}/"
+    $conf{'emptydir'},
+    "$conf{'backup_dest'}/${interval}.${oldest_copy}/"
   );
-  rmdir $emptydir;
+  rmdir $conf{'emptydir'};
 }
 
 # sftp_rotate(interval)
@@ -117,14 +114,21 @@ sub sync_to_empty {
 sub sftp_rotate {
   my $interval = shift;
   open(
-    my $sftp_handle, "|-", $sftp_path,
+    my $sftp_handle, "|-", $conf{'sftp_path'},
     (
-      "-oIdentityFile=$private_key",
+      "-oIdentityFile=$conf{'private_key'}",
       '-b', '-',
-      $backup_dest
+      $conf{'backup_dest'}
     )
   );
   print $sftp_handle $rotation{$interval};
   close $sftp_handle;
 }
 
+# get_basedir()
+#
+# Figures out and returns the full path to the directory where this file lives
+sub get_basedir {
+  my ($volume,$dir,$filename) = File::Spec->splitpath( File::Spec->rel2abs(__FILE__ ) );
+  return $dir;
+}
