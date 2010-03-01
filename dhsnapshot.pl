@@ -53,8 +53,9 @@ if ($action eq "daily") {
 } elsif ($action eq "sync") {
     sync();
 } else {
-  print "\nInvalid argument.\n";
-  print "Use: $0 [daily|weekly|monthly]\n\n";
+  print "\n";
+  print "Invalid argument.\n" if $action ne "";
+  print "Use: $0 [daily|weekly|monthly|sync]\n\n";
   exit;
 }
 
