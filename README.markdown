@@ -7,6 +7,8 @@ It can be used to backup any machine: your computer, a server or even a Dreamhos
 
 You just need to configure it with the path to backup, your dreamhost backup account and the private key used for authentication and it will create daily backups and keep the last 7 days, 4 weeks and 6 months.
 
+You can read a [blog post](http://priodev.blogspot.com/2010/03/rsnapshot-style-backups-on-dreamhost.html) I wrote about it if you're interested in the "whys" and "hows".
+
 # Quick Start
 
 1. Place the files in a directory
