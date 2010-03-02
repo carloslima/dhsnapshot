@@ -61,7 +61,7 @@ You just need to configure it with the path to backup, your dreamhost backup acc
     b000000@hanjin.dreamhost.com's password:
     sftp> mkdir backup
 
-2.Configure the key as authorized key
+2.Configure the key as authorized key  
 *This is needed so the backup script doesn't need to type a password to connect :)*
 
     sftp> mkdir .ssh
@@ -102,8 +102,8 @@ You just need to configure it with the path to backup, your dreamhost backup acc
     Couldn't rename file "/vol/shelf1/zool/b000000/backup/daily.0" to "/vol/shelf1/zool/b000000/backup/daily.1": No such file or directory
     --link-dest arg does not exist: ../daily.1
 
-> The errors here are ok, they just say that the "daily.X" directory doesn't exist (yet).
-> After running the script for 7 days, the errors will disappear.
+> The errors here are ok, they just say that the "daily.X" directory doesn't exist (yet).  
+> After running the script for 7 days, the errors will disappear.  
 > The same is valid for the Weekly and Monthly backups
 
 ## Setup the crontab to run your backups automatically
@@ -134,10 +134,10 @@ You just need to configure it with the path to backup, your dreamhost backup acc
     0  4  * * * /home/bob/dhsnapshot/dhsnapshot.pl daily
     [bob@dreamhost]~/dhsnapshot$
 
-Monthly backups are rolled every 1st at 2am
-Weeklys are rolled every Sunday 3am
+Monthly backups are rolled every 1st at 2am  
+Weeklys are rolled every Sunday 3am  
 Dailys are rolled and a new backup generated everyday at 4am
 
-> If you setup your email here, you will get daily notifications containing the 'sftp renames' results and error messages if any.
+> If you setup your email here, you will get daily notifications containing the 'sftp renames' results and error messages if any.  
 > I think it's good to receive it so you know your backup is running and if any problem arises you get aware about it very fast.
 
