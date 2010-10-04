@@ -6,5 +6,6 @@ $conf{'private_key'} = "/home/user/.ssh/id_rsa";
 
 $conf{'rsync_path'} = '/usr/bin/rsync';
 $conf{'sftp_path'} = '/usr/bin/sftp';
+$conf{'nice_path'} = '/usr/bin/nice';
 
 return 1;

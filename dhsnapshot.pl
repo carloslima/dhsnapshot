@@ -65,6 +65,7 @@ if ($action eq "daily") {
 sub sync {
   my $interval = $lowest_interval;
   system(
+    $conf{'nice_path'},'-19',
     $conf{'rsync_path'},
     '-e', "ssh -oIdentityFile=$conf{'private_key'}",
     '-az', '--delete','--delete-excluded',
@@ -98,6 +99,7 @@ sub sync_to_empty {
 
   mkdir $conf{'emptydir'};
   system(
+    $conf{'nice_path'},'-19',
     $conf{'rsync_path'},
     '-e', "ssh -oIdentityFile=$conf{'private_key'}",
     '-az', '--delete',
