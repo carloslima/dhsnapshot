@@ -67,7 +67,8 @@ sub sync {
   system(
     $conf{'rsync_path'},
     '-e', "ssh -oIdentityFile=$conf{'private_key'}",
-    '-az', '--delete',
+    '-az', '--delete','--delete-excluded',
+    "--exclude-from=$conf{'backup_filter'}",
     "--link-dest='../${interval}.1'",
     $conf{'backup_source'},
     "$conf{'backup_dest'}/${interval}.0/"

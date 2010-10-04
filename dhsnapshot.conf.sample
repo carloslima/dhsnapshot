@@ -1,5 +1,6 @@
 $conf{'backup_source'} = "/home/user/myfiles/";
 $conf{'backup_dest'} = 'b00000@hanjin.dreamhost.com:backup';
+$conf{'backup_filter'} = '/home/user/.backup-exclude-rsync';
 
 $conf{'private_key'} = "/home/user/.ssh/id_rsa";
 
