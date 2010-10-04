@@ -5,7 +5,6 @@ require File::Spec;
 our %conf;
 $conf{'basedir'} = get_basedir();
 $conf{'emptydir'} = "$conf{'basedir'}/__emptydir/";
-$conf{'private_key'} = "$conf{'basedir'}/id_rsa";
 
 require 'dhsnapshot.conf';
 

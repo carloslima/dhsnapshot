@@ -1,6 +1,8 @@
 $conf{'backup_source'} = "/home/user/myfiles/";
 $conf{'backup_dest'} = 'b00000@hanjin.dreamhost.com:backup';
 
+$conf{'private_key'} = "/home/user/.ssh/id_rsa";
+
 $conf{'rsync_path'} = '/usr/bin/rsync';
 $conf{'sftp_path'} = '/usr/bin/sftp';
 
