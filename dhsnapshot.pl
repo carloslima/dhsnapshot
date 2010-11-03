@@ -64,12 +64,13 @@ if ($action eq "daily") {
 # Runs rsync to update the lowest interval
 sub sync {
   my $interval = $lowest_interval;
+  my @exclude_filter_settings = get_exclude_filter_settings();
   system(
     $conf{'nice_path'},'-19',
     $conf{'rsync_path'},
     '-e', "ssh -oIdentityFile=$conf{'private_key'}",
-    '-az', '--delete','--delete-excluded',
-    "--exclude-from=$conf{'backup_filter'}",
+    '-az', '--delete',
+    @exclude_filter_settings,
     "--link-dest='../${interval}.1'",
     $conf{'backup_source'},
     "$conf{'backup_dest'}/${interval}.0/"
@@ -134,4 +135,13 @@ sub sftp_rotate {
 sub get_basedir {
   my ($volume,$dir,$filename) = File::Spec->splitpath( File::Spec->rel2abs(__FILE__ ) );
   return $dir;
+}
+
+# get_exclude_filter_settings()
+#
+# Checks if an exclude filter file is configured and returns the appropriate
+#  parameters to be passed to rsync
+sub get_exclude_filter_settings {
+  return () unless ($conf{'exclude_filter'});
+  return ('--delete-excluded', "--exclude-from=$conf{'exclude_filter'}");
 }

@@ -1,6 +1,11 @@
 $conf{'backup_source'} = "/home/user/myfiles/";
 $conf{'backup_dest'} = 'b00000@hanjin.dreamhost.com:backup';
-$conf{'backup_filter'} = '/home/user/.backup-exclude-rsync';
+
+# To exclude files from your backup, set the following to a file containing
+# your exclude rules
+# For more info check `man rsync`, specifically the '--exclude-from=' parameter
+#
+# $conf{'exclude_filter'} = '/home/user/.backup-exclude-rsync';
 
 $conf{'private_key'} = "/home/user/.ssh/id_rsa";
 
