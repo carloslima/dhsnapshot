@@ -15,7 +15,7 @@ You can read a [blog post](http://priodev.blogspot.com/2010/03/rsnapshot-style-b
 2. Rename dhsnapshot.conf.sample to dhsnapshot.conf
 3. Edit it.
 4. Make sure the directory you're backing up to on the backup server exists
-5. Setup ssh public key authentication and save the private key to a file named id_rsa on the same directory
+5. Setup ssh public key authentication
 6. Run it manually for the first time
 7. Schedule a set of cron jobs to do it automatically.
 
@@ -40,15 +40,32 @@ You can read a [blog post](http://priodev.blogspot.com/2010/03/rsnapshot-style-b
     [bob@dreamhost]~/dhsnapshot$ more dhsnapshot.conf
     $conf{'backup_source'} = "/home/bob/trac_trac/";
     $conf{'backup_dest'} = 'b000000@hanjin.dreamhost.com:backup';
+    $conf{'backup_filter'} = '/home/bob/.backup-exclude-rsync';
+
+    $conf{'private_key'} = "/home/bob/.ssh/id_rsa";
 
     $conf{'rsync_path'} = '/usr/bin/rsync';
     $conf{'sftp_path'} = '/usr/bin/sftp';
+    $conf{'nice_path'} = '/usr/bin/nice';
 
     return 1;
 
-## Generate an ssh key pair to use
 
-    [bob@dreamhost]~/dhsnapshot$ ssh-keygen -q -N "" -f ./id_rsa
+## Setup SSH public key authentication
+
+1. Check if you already have a key
+    [bob@dreamhost]~/dhsnapshot$ ls -lh ~/.ssh/id_rsa
+
+2. If you get something like
+    -rw------- 1 bob bob 1.7K 2010-10-30 19:31 /home/bob/.ssh/id_rsa
+
+    Then you're already set.
+
+3. If you get a something like
+    ls: cannot access /home/bob/.ssh/id_rsa: No such file or directory
+
+    Then you can create a ssh key pair by doing:
+    [bob@dreamhost]~/dhsnapshot$ ssh-keygen -q -N "" -f ~/.ssh/id_rsa
 
 ## Setup the backup server
 
@@ -70,7 +87,7 @@ You can read a [blog post](http://priodev.blogspot.com/2010/03/rsnapshot-style-b
     sftp> chmod 700 .ssh
     Changing mode on /vol/shelf1/zool/b000000/.ssh
     sftp> cd .ssh
-    sftp> put id_rsa.pub
+    sftp> put /home/bob/.ssh/id_rsa.pub
     Uploading id_rsa.pub to /vol/shelf1/zool/b000000/.ssh/id_rsa.pub
     id_rsa.pub                                    100%  395     0.4KB/s   00:00
     sftp> rename id_rsa.pub authorized_keys
@@ -80,7 +97,6 @@ You can read a [blog post](http://priodev.blogspot.com/2010/03/rsnapshot-style-b
 
 ## Setup permissions for your script and keys
 
-    [bob@dreamhost]~/dhsnapshot$ chmod 400 id_rsa
     [bob@dreamhost]~/dhsnapshot$ chmod 500 dhsnapshot.pl
     [bob@dreamhost]~/dhsnapshot$ chmod 400 dhsnapshot.conf
 
